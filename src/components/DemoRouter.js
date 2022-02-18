@@ -1,5 +1,7 @@
 import React, { Fragment } from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import CrudDemo from './CrudDemo';
+import PersonDetails from './PersonDetails';
 
 const DemoRouter = () => {
     return (
@@ -12,6 +14,8 @@ const DemoRouter = () => {
                         <Route path="/home" component={Home} />
                         <Route path="/person" component={Person} />
                         <Route path="/about" component={About} />
+                        <Route path="/crud" component={CrudDemo} />
+                        <Route path="/details/" component={PersonDetails} />
 
                         <Route component={NotFound} />
                     </Switch>
@@ -44,6 +48,9 @@ const Header = () => {
                     </li>
                     <li className='nav-item'>
                         <Link className='navbar-brand' to="/about">About Us</Link>
+                    </li>
+                    <li className='nav-item'>
+                        <Link className='navbar-brand' to="/crud">CRUD</Link>
                     </li>
                 </ul>
                 <form>
