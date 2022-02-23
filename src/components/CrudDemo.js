@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import PersonService from '../service/PersonService';
 
@@ -49,16 +50,28 @@ const CrudDemo = () => {
                 history.push(`/details/${props.id}`);
             }
 
+            const deleteById = () => {
+                const service = new PersonService();
+                service.deletePersonById(props.id).then(res => {
+                    if (res.status === 204) {
+                        setMessage({value: 'Person successfully deleted' + props.id, type: 'success'});
+                        setReload(!reload);
+                    } else {
+                        setMessage({value: 'API Error: ' + res.status, type: 'danger'});
+                    }
+                });
+            }
+
         return (
         <div>
             <button type='button' className='btn btn-primary' onClick={showData}>Details</button>
-            <button type='button' className='btn btn-danger m-2'>Delete</button>
+            <button type='button' className='btn btn-danger m-2' onClick={deleteById}>Delete</button>
             <button type='button' className='btn btn-warning'>Edit</button>
         </div>
         )
         };
 
-        const TableRow = (props) => {
+        const TableRow = () => {
             return (
                 <tbody>
                     {
@@ -67,7 +80,7 @@ const CrudDemo = () => {
                         <td>{person.id}</td>
                         <td>{person.firstName} {person.lastName}</td>
                         <td>{person.email}</td>
-                        <td><TableAction /></td>
+                        <td><TableAction id = {person.id} /></td>
                         </tr>
                     ))
                     }
@@ -87,13 +100,20 @@ const CrudDemo = () => {
 
     const Form = () => {
 
-        const {register, handleSubmit, reset, formState: {errors} } = useForm();
+        const {register, handleSubmit, reset, formState: {errors} } = useForm;
 
         const savePerson = (data) => {
             console.log(data);
             // call API
             const service = new PersonService();
-            service.savePerson(data).then()
+            service.savePerson(data).then(res => {
+                if (res.status === 201) {
+                    setMessage({value: 'Person successfully saved!' + res.data.id, type: 'success'});
+                    setReload(!reload);
+                } else {
+                    setMessage({value: 'Person not saved!' + res.status, type: 'danger'});
+                }
+            });
         }
 
     }
