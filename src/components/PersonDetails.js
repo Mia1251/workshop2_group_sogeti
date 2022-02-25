@@ -31,7 +31,7 @@ const PersonDetails = () => {
                     Person Information
                 </div>
                 <div className='card-body'>
-                    <h4 className='card-title'>Title: {person.title}</h4>
+                    <h4 className='card-title'>{person.title}</h4>
                     <p className='card-text'>ID: {person.id}</p>
                     <p className='card-text'>Name: {person.firstName} {person.lastName}</p>
                     <p className='card-text'>Email: {person.email}</p>

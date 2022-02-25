@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import PersonService from '../service/PersonService';
@@ -100,7 +100,7 @@ const CrudDemo = () => {
 
     const Form = () => {
 
-        const {register, handleSubmit, reset, formState: {errors} } = useForm;
+        const {register, handleSubmit, reset, formState: {errors} } = useForm();
 
         const savePerson = (data) => {
             console.log(data);
@@ -108,19 +108,49 @@ const CrudDemo = () => {
             const service = new PersonService();
             service.savePerson(data).then(res => {
                 if (res.status === 201) {
-                    setMessage({value: 'Person successfully saved!' + res.data.id, type: 'success'});
+                    setMessage({value: 'Created Person with Id '+ res.data.id + ' is Done!', type: 'success'});
                     setReload(!reload);
-                } else {
-                    setMessage({value: 'Person not saved!' + res.status, type: 'danger'});
                 }
             });
         }
+
+        return(
+            <Fragment>
+                <form className='form-control m-2 p-3' onSubmit={handleSubmit(savePerson)} >
+                    <div className='row mb-3'>
+                        <div className='col-6'>
+                            <input type="text" className='form-control' {...register('firstName', {required: true})} placeholder='Enter FirstName'/>
+                            {errors.firstName && <span className='text-danger'>First Name is required!</span>}
+                        </div>
+                        <div className='col-6'>
+                            <input type="text" className='form-control' {...register('lastName', {required: true})} placeholder='Enter LastName'/>
+                            {errors.lastName && <span className='text-danger'>LastName is required!</span>}
+                        </div>
+                    </div>
+                    <div className='row mb-3'>
+                        <div className='col'>
+                            <input type="text" className='form-control' {...register('email', {required: true})} placeholder='Enter Email'/>
+                            {errors.email && <span className='text-danger'>Email is required!</span>}
+                        </div>
+                    </div>
+                    <div className='row mb-3'>
+                        <div className='col'>
+                            <input type="text" className='form-control' {...register('title')} placeholder='Enter Title' />
+                        </div>
+                    </div>
+                    <button type='submit' className='btn btn-success'>Add</button>
+                    <button type='button' className='btn btn-danger m-1' onClick={() => reset()}>Reset</button>
+                </form>
+            </Fragment>
+        );
 
     }
 
 
     return (
         <div className='container'>
+            {message && <div className={'alert alert-' + message.type}>{message.value}</div>}
+            <Form />
             <Table />
         </div>
     );
