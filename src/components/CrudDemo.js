@@ -18,10 +18,9 @@ const CrudDemo = () => {
             console.log(res);
             if(res.status === 200) {
                 setPersons(res.data);
-                setMessage({value: "Operation Done!", type: 'success'});
             } else {
                 // display error message
-                setMessage({value: "Operation Failed!", type: 'danger'});
+                setMessage({value: "API Error!" + res.status, type: 'danger'});
             }
         });
        // update the state 
@@ -53,8 +52,8 @@ const CrudDemo = () => {
             const deleteById = () => {
                 const service = new PersonService();
                 service.deletePersonById(props.id).then(res => {
-                    if (res.status === 204) {
-                        setMessage({value: 'Person successfully deleted' + props.id, type: 'success'});
+                    if (res.status === 204 || res.status === 202) {
+                        setMessage({value: 'Person with id: ' + props.id + ' successfully deleted!', type: 'info'});
                         setReload(!reload);
                     } else {
                         setMessage({value: 'API Error: ' + res.status, type: 'danger'});
@@ -65,8 +64,9 @@ const CrudDemo = () => {
         return (
         <div>
             <button type='button' className='btn btn-primary' onClick={showData}>Details</button>
-            <button type='button' className='btn btn-danger m-2' onClick={deleteById}>Delete</button>
-            <button type='button' className='btn btn-warning'>Edit</button>
+            {/* <button type='button' className='btn btn-danger m-2' onClick={deleteById}>Delete</button> */}
+            <button type='button' className='btn btn-danger m-2' onClick={({}) => { if (window.confirm('Are you sure you wish to delete this item?') ? onConfirm("confirm") : onCancel("cancel"},}>Delete</button>
+            <button type='button' className='btn btn-warning' >Edit</button>
         </div>
         )
         };
@@ -102,7 +102,7 @@ const CrudDemo = () => {
 
         const {register, handleSubmit, reset, formState: {errors} } = useForm();
 
-        const savePerson = (data) => {
+        const savePerson = async (data) => {
             console.log(data);
             // call API
             const service = new PersonService();
@@ -110,9 +110,12 @@ const CrudDemo = () => {
                 if (res.status === 201) {
                     setMessage({value: 'Created Person with Id '+ res.data.id + ' is Done!', type: 'success'});
                     setReload(!reload);
+                } else {
+                    setMessage({value: 'API Error: ' + res.status})
                 }
             });
         }
+
 
         return(
             <Fragment>
