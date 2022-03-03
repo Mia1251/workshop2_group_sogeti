@@ -17,7 +17,7 @@ const DemoRouter = () => {
                         <Route path="/about" component={About} />
                         <Route path="/crud" component={CrudDemo} />
                         <Route path="/details/:id" component={PersonDetails} />
-                        <Route path="/edit" component={EditForm} />
+                        <Route path="/edit/" component={EditForm} />
 
                         <Route component={NotFound} />
                     </Switch>
