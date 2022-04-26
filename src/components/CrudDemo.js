@@ -103,7 +103,7 @@ const CrudDemo = () => {
 
         const {register, handleSubmit, reset, formState: {errors} } = useForm();
 
-        const savePerson = async (data) => {
+        const savePerson = (data) => {
             console.log(data);
             // call API
             const service = new PersonService();
